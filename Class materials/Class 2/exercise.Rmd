@@ -1,0 +1,130 @@
+---
+title: "Chapter 3"
+author: "WIBE"
+date: "2/9/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Vampire example
+```{r}
+pr_positive_vampire <- 0.95
+pr_positive_mortal <- 0.01
+pr_vampire <- 0.001
+
+pr_positive <- pr_positive_vampire*pr_vampire+pr_positive_mortal* (1 - pr_vampire)
+
+(pr_vampire_positive <- pr_positive_vampire*pr_vampire/pr_positive)
+```
+
+Page 52-54
+Based on the water/earth example
+```{r}
+p_grid <- seq(from = 0, to = 1, length.out = 1000)
+
+prop_p <- rep( 1 , 1000 )
+
+prop_data <- dbinom( 6 , size=9 , prob=p_grid )
+
+posterior <- prop_data * prop_p
+
+posterior <- posterior / sum(posterior)
+
+#Taking samples from posterior
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = T)
+
+plot(samples)
+plot(p_grid, posterior, type = "b")
+
+#add up posterior values where p < .5
+## Suppose I ask for the posterior probability that the proportion of water is less than 50% (0.5):
+sum(posterior[p_grid < 0.5]) #0.17
+# another method (add up samples below 0.5 an divide by total number of samples)
+sum(samples < 0.5)/1e4 # 0.18
+# How much of the posterior distribution lies between 0.5 and 0.75 percent?
+sum (samples > 0.5 & samples < 0.75)/1e4 # 0.59
+# find the 80th percentile in daat
+quantile(samples, 0.8) #0.76
+
+quantile(samples, c(0.1, 0.9))
+
+# Point estimate
+## One way: Find the value with highest posterior probability (maximum a posteriori (MAP)) estimate
+p_grid[ which.max(posterior)]
+# Otherwise use mean of median (mean(samples)) (median(samples))
+
+
+```
+
+
+**Pandemic exercise 1**
+0 = Negative
+1 = Positive
+```{r}
+inf <- c(1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,1,0,1)
+uninf <- c(1,0,0,1,0,1,1,0,0,0,1,0,0,0,0,1,1,0,0,0)
+
+table(inf)
+table(uninf)
+```
+
+Grid approximation for *infected*
+```{r}
+# define grid
+p_grid <- seq(from = 0, to = 1, length.out = 20)
+
+# define prior
+prior <- rep( 1 , 20 )
+
+# compute likelihood at each value in grid
+likelihood <- dbinom( 11 , size=20 , prob=p_grid )
+
+# compute product of likelihood and prior
+unstd.posterior <- likelihood * prior
+
+# standardize the posterior, so it sums to 1
+posterior <- unstd.posterior / sum(unstd.posterior)
+posterior
+
+# Plotting (display the posterior distribution)
+plot( p_grid , posterior , type="b" ,
+    xlab="probability of infected" , ylab="posterior probability" )
+
+# what is the probability 
+```
+
+Grid approximation for *uninfected*
+```{r}
+# define grid
+p_grid <- seq(from = 0, to = 1, length.out = 20)
+
+# define prior
+prior <- rep( 1 , 20 )
+
+# compute likelihood at each value in grid
+likelihood <- dbinom( 13 , size=20 , prob=p_grid )
+
+# compute product of likelihood and prior
+unstd.posterior <- likelihood * prior
+
+# standardize the posterior, so it sums to 1
+posterior <- unstd.posterior / sum(unstd.posterior)
+
+# Plotting (display the posterior distribution)
+plot( p_grid , posterior , type="b" ,
+    xlab="probability of uninfected" , ylab="posterior probability" )
+```
+
+1b
+Confidence intervals
+```{r}
+samples <- sample(p_grid, prob = posterior, size = 1e4, replace = T)
+
+sum(samples < 0.50)/1e4
+
+
+```
+
