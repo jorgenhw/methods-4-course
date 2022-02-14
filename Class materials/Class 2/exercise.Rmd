@@ -20,6 +20,12 @@ pr_positive <- pr_positive_vampire*pr_vampire+pr_positive_mortal* (1 - pr_vampir
 (pr_vampire_positive <- pr_positive_vampire*pr_vampire/pr_positive)
 ```
 
+On class
+```{r}
+
+```
+
+
 Page 52-54
 Based on the water/earth example
 ```{r}
@@ -35,6 +41,12 @@ posterior <- posterior / sum(posterior)
 
 #Taking samples from posterior
 samples <- sample(p_grid, prob = posterior, size = 1e4, replace = T)
+##############################
+?sample
+
+x <- c(1,2,3,4,5,6,7,8,9)
+sample(x, size = 10, replace = T)
+##############################
 
 plot(samples)
 plot(p_grid, posterior, type = "b")
@@ -55,7 +67,7 @@ quantile(samples, c(0.1, 0.9))
 ## One way: Find the value with highest posterior probability (maximum a posteriori (MAP)) estimate
 p_grid[ which.max(posterior)]
 # Otherwise use mean of median (mean(samples)) (median(samples))
-
+sum(posterior*abs(0.5-p_grid))
 
 ```
 
