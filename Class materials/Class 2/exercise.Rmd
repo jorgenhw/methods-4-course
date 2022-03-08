@@ -130,6 +130,8 @@ plot( p_grid , posterior , type="b" ,
     xlab="probability of uninfected" , ylab="posterior probability" )
 ```
 
+
+
 1b
 Confidence intervals
 ```{r}
