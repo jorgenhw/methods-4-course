@@ -1,0 +1,65 @@
+---
+title: "NLP analysis"
+author: "WIBE"
+date: "3/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dagitty)
+library(rethinking)
+
+```
+
+
+```{r}
+sex
+drunkness
+gender
+garlic
+
+??dagitty
+```
+
+
+```{r}
+# Drawing up DAG
+dag5.1 <- dagitty( "dag {
+    S -> D -> G ->F
+}")
+coordinates(dag5.1) <- list( x=c(S=4,M=1) , y=c(S=0,M=1) )
+drawdag( dag5.1 )
+
+# Conditional independence test
+DMA_dag2 <- dagitty('dag{ L <- D <- G -> L }')
+impliedConditionalIndependencies( DMA_dag2 )
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
